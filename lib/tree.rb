@@ -20,6 +20,21 @@ class Tree
     end
   end
 
+  def search_iteratively(value)
+    current_node = @root
+    while !current_node.nil? do
+      if current_node.value == value
+        return current_node
+      end
+      if current_node.value > value
+        current_node = current_node.left
+      else
+        current_node = current_node.right
+      end
+    end
+    return nil
+  end
+
   # in order traversals
   def self.go_iteratively!(root)
     stack = []

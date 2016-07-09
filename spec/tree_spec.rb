@@ -42,15 +42,27 @@ describe "Tree" do
     end
   end
 
-  describe "search" do
-    it "returns a matching node if it exists" do
-      tree = Tree.new(build_tree)
-      expect(tree.search(4).value).to eq(4)
+  describe "instance methods" do
+    let(:tree){ Tree.new(build_tree) }
+
+    describe "search" do
+      it "returns a matching node if it exists" do
+        expect(tree.search(4).value).to eq(4)
+      end
+
+      it "returns nil if no match exists" do
+        expect(tree.search(11)).to be_nil
+      end
     end
 
-    it "returns nil if no match exists" do
-      tree = Tree.new(build_tree)
-      expect(tree.search(11)).to be_nil
+    describe "search_iteratively" do
+      it "returns a matching node if it exists" do
+        expect(tree.search_iteratively(4).value).to eq(4)
+      end
+
+      it "returns nil if no match exists" do
+        expect(tree.search_iteratively(11)).to be_nil
+      end
     end
   end
 end
