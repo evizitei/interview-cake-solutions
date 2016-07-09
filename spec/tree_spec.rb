@@ -13,13 +13,27 @@ def build_tree
   root = TreeNode.new(5)
   root.left = node2
   root.right = node3
+  node2.parent = root
+  node3.parent = root
+
   node2.left = node1
   node2.right = leaf2
+  node1.parent = node2
+  leaf2.parent = node2
+
   node3.left = leaf3
   node3.right = node4
+  leaf3.parent = node3
+  node4.parent = node3
+
   node1.left = leaf1
+  leaf1.parent = node1
+
   node4.left = leaf4
   node4.right = leaf5
+  leaf4.parent = node4
+  leaf5.parent = node4
+
   return root
 end
 
@@ -71,6 +85,30 @@ describe "Tree" do
 
     it "can find max" do
       expect(tree.max).to eq(10)
+    end
+
+    describe "#successor" do
+      it "returns next node if there is one" do
+        node = tree.search(6)
+        expect(tree.successor(node).value).to eq(7)
+      end
+
+      it "returns nil for end of iteration" do
+        node = tree.search(10)
+        expect(tree.successor(node)).to be_nil
+      end
+    end
+
+    describe "#predecessor" do
+      it "returns previous node if there is one" do
+        node = tree.search(6)
+        expect(tree.predecessor(node).value).to eq(5)
+      end
+
+      it "returns nil for beginning of iteration" do
+        node = tree.search(1)
+        expect(tree.predecessor(node)).to be_nil
+      end
     end
   end
 end
