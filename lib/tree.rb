@@ -1,12 +1,26 @@
-class BstNode
+class TreeNode
   attr_accessor :left, :right, :value
   def initialize(val)
     @value = val
   end
 end
 
-class InorderTreeWalk
+class Tree
+  def initialize(root)
+    @root = root
+  end
 
+  def search(value, node=@root)
+    return nil if node.nil?
+    return node if node.value == value
+    if node.value > value
+      return search(value, node.left)
+    else
+      return search(value, node.right)
+    end
+  end
+
+  # in order traversals
   def self.go_iteratively!(root)
     stack = []
     keys = []
