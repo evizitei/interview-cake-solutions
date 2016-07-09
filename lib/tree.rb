@@ -7,8 +7,70 @@ class TreeNode
 end
 
 class Tree
-  def initialize(root)
+  attr_reader :root
+
+  def initialize(root=nil)
     @root = root
+  end
+
+  def insert(value)
+    new_node = TreeNode.new(value)
+    if @root.nil?
+      @root = new_node
+    else
+      current_node = @root
+      parent = current_node
+
+      while !current_node.nil? do
+        parent = current_node
+        if current_node.value > value
+          current_node = current_node.left
+        else
+          current_node = current_node.right
+        end
+      end
+
+      new_node.parent = parent
+      if parent.value > value
+        parent.left = new_node
+      else
+        parent.right = new_node
+      end
+    end
+  end
+
+  def delete(node)
+    if node.left.nil? && node.right.nil?
+      parent = node.parent
+      if parent.left == node
+        parent.left = nil
+      else
+        parent.right = nil
+      end
+      node.parent = nil
+    else
+      if node.left.nil?
+        splice_out(node, node.right)
+      elsif node.right.nil?
+        splice_out(node, node.left)
+      else
+        # node has 2 children
+        node_next = successor(node)
+        splice_out(node, node_next)
+      end
+    end
+  end
+
+  def splice_out(node, child)
+    parent = node.parent
+    child.parent = parent
+    if parent.left == node
+      parent.left = node.right
+    else
+      parent.right = node.right
+    end
+    node.right = nil
+    node.parent = nil
   end
 
   def min(cur_node=@root)
@@ -27,7 +89,7 @@ class Tree
 
   def successor(node)
     if node.right
-      return min(node)
+      return search(min(node))
     else
       next_node = node.parent
       while !next_node.nil? && next_node.right == node do
@@ -40,7 +102,7 @@ class Tree
 
   def predecessor(node)
     if node.left
-      return max(node)
+      return search(max(node))
     else
       prev_node = node.parent
       while !prev_node.nil? && prev_node.left == node do

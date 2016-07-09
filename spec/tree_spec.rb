@@ -111,4 +111,55 @@ describe "Tree" do
       end
     end
   end
+
+  describe "tree modulation" do
+    it "can insert nodes" do
+      tree = Tree.new
+      tree.insert(3)
+      tree.insert(5)
+      tree.insert(1)
+      expect(tree.min).to eq(1)
+      expect(tree.max).to eq(5)
+    end
+
+    describe "node deletion" do
+      let(:tree){ Tree.new }
+
+      before(:each) do
+        tree.insert(5)
+
+        tree.insert(2)
+        tree.insert(1)
+        tree.insert(3)
+
+        tree.insert(7)
+        tree.insert(6)
+        tree.insert(8)
+
+        tree.insert(9)
+      end
+
+      it "can delete a leaf" do
+        leaf = tree.search(1)
+        tree.delete(leaf)
+        expect(tree.search(1)).to be_nil
+      end
+
+      it "can delete a single child node" do
+        node = tree.search(8)
+        tree.delete(node)
+        expect(tree.search(8)).to be_nil
+        leaf = tree.search(9)
+        expect(leaf.parent.value).to eq(7)
+      end
+
+      it "can delete a full mid-tier node" do
+        node = tree.search(7)
+        tree.delete(node)
+        expect(tree.search(7)).to be_nil
+        node = tree.search(5)
+        expect(node.right.value).to eq(8)
+      end
+    end
+  end
 end
