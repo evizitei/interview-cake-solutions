@@ -64,5 +64,13 @@ describe "Tree" do
         expect(tree.search_iteratively(11)).to be_nil
       end
     end
+
+    it "can return min" do
+      expect(tree.min).to eq(1)
+    end
+
+    it "can find max" do
+      expect(tree.max).to eq(10)
+    end
   end
 end

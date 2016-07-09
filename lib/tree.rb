@@ -10,6 +10,22 @@ class Tree
     @root = root
   end
 
+  def min
+    cur_node = @root
+    while !cur_node.left.nil?
+      cur_node = cur_node.left
+    end
+    return cur_node.value
+  end
+
+  def max
+    cur_node = @root
+    while !cur_node.right.nil?
+      cur_node = cur_node.right
+    end
+    return cur_node.value
+  end
+
   def search(value, node=@root)
     return nil if node.nil?
     return node if node.value == value
