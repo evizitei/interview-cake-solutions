@@ -32,4 +32,13 @@ describe "InorderTreeWalk" do
       expect(keys[i] > keys[i-1]).to be_truthy
     end
   end
+
+  it "does the same iteratively" do
+    root = build_tree
+    keys = InorderTreeWalk.go_iteratively!(root)
+    expect(keys.length).to eq(10)
+    for i in (1..keys.length - 1) do
+      expect(keys[i] > keys[i-1]).to be_truthy
+    end
+  end
 end

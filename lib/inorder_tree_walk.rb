@@ -6,16 +6,42 @@ class BstNode
 end
 
 class InorderTreeWalk
-  def self.go!(root)
+
+  def self.go_iteratively!(root)
+    stack = []
     keys = []
-    fetch_ordered_keys(root, keys)
+    current_node = root
+    just_popped = false
+    while !current_node.nil? do
+      if !just_popped && current_node.left
+        stack.push(current_node)
+        just_popped = false
+        current_node = current_node.left
+      else
+        keys.push(current_node.value)
+        if current_node.right
+          current_node = current_node.right
+          just_popped = false
+        else
+          current_node = stack.pop
+          just_popped = true
+        end
+      end
+    end
+
+    return keys
   end
 
-  def self.fetch_ordered_keys(node, keys)
+  def self.go!(root)
+    keys = []
+    fetch_ordered_keys_recursively(root, keys)
+  end
+
+  def self.fetch_ordered_keys_recursively(node, keys)
     return keys if node.nil?
-    keys = fetch_ordered_keys(node.left, keys)
+    keys = fetch_ordered_keys_recursively(node.left, keys)
     keys.push(node.value)
-    keys = fetch_ordered_keys(node.right, keys)
+    keys = fetch_ordered_keys_recursively(node.right, keys)
     return keys
   end
 end
