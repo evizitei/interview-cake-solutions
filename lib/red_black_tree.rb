@@ -50,28 +50,26 @@ class RedBlackTree < Tree
         parent.right = new_node
       end
     end
-    puts "FIXING UP #{value}"
     red_black_fixup(new_node)
   end
 
   def red_black_fixup(node)
     return unless node.color == "RED"
     parent = node.parent
-    puts "PARENT #{parent}"
     return node.color = "BLACK" if parent.nil? # new root of tree
     if parent.color == "RED"
       # we have a violation, need to figure out which one
-      uncle = (parent.left == node) ? parent.right : parent.left
+      grandpa = parent.parent
+      uncle = (grandpa.left == parent) ? grandpa.right : grandpa.left
       if uncle.color == "RED"
         # Hooray, this case is easy, pass down the blackness
         # from grandfather node, recolor grandpa to red,
         # and recursively fixup grandpa
         parent.color = "BLACK"
         uncle.color = "BLACK"
-        parent.parent = "RED"
-        red_black_fixup(parent.parent)
+        grandpa.color = "RED"
+        red_black_fixup(grandpa)
       else
-        grandpa = parent.parent
         # dang, have to do some rotations...
         if node == parent.left && parent == grandpa.left
           rotate_right(parent, grandpa)
@@ -98,6 +96,9 @@ class RedBlackTree < Tree
           node.color = "BLACK"
           grandpa.color = "RED"
         else
+          puts "CURRENT NODE #{node.value} #{node.color}"
+          puts "PARENT NODE #{parent.value} #{parent.color}"
+          puts "GRANDPA NODE #{grandpa.value} #{grandpa.color}"
           raise "TREE STRUCTURE CORRUPTED, ABANDON HOPE"
         end
       end
@@ -109,7 +110,15 @@ class RedBlackTree < Tree
     parent.left = right_sub
     right_sub.parent = parent
 
-    node.parent = parent.parent
+    grandparent = parent.parent
+    node.parent = grandparent
+    if grandparent
+      if grandparent.left == parent
+        grandparent.left = node
+      else
+        grandparent.right = node
+      end
+    end
     node.right = parent
     parent.parent = node
 
@@ -121,9 +130,18 @@ class RedBlackTree < Tree
     parent.right = left_sub
     left_sub.parent = parent
 
-    node.parent = parent.parent
+    grandparent = parent.parent
+    node.parent = grandparent
+    if grandparent
+      if grandparent.left == parent
+        grandparent.left = node
+      else
+        grandparent.right = node
+      end
+    end
     node.left = parent
     parent.parent = node
+
     @root = node if @root == parent
   end
 end
