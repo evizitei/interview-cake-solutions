@@ -14,7 +14,8 @@ class Tree
   end
 
   def insert(value)
-    new_node = TreeNode.new(value)
+    new_node = value.is_a?(TreeNode) ? value : TreeNode.new(value)
+
     if @root.nil?
       @root = new_node
     else
