@@ -47,4 +47,20 @@ describe "ListGraph" do
       expect(graph.connections(node).size).to eq(1)
     end
   end
+
+  describe "shortest path" do
+    it "returns the nodes representing the path" do
+      graph.insert_edge("s", "w")
+      graph.insert_edge("s", "r")
+      graph.insert_edge("r", "v")
+      graph.insert_edge("x", "w")
+      graph.insert_edge("t", "w")
+      graph.insert_edge("t", "x")
+      graph.insert_edge("t", "u")
+      graph.insert_edge("x", "u")
+      graph.insert_edge("x", "y")
+      graph.insert_edge("y", "u")
+      expect(graph.shortest_path("s", "y").map(&:value)).to eq(["s","w","x","y"])
+    end
+  end
 end

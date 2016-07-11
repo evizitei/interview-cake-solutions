@@ -34,6 +34,43 @@ class ListGraph
     update_adjacency_list(node2, node1)
   end
 
+  def shortest_path(val1, val2)
+    start = @lookup[val1]
+    return nil unless start
+    color = Array.new(@adjacency_list.length){ "white" }
+    previous = Array.new(@adjacency_list.length)
+    queue = []
+    queue.push(start)
+
+    node = nil
+    while queue.size > 0 do
+      node = queue.shift
+      color[node.index] = "black"
+      if node.value == val2
+        queue = []
+      else
+        edges = @adjacency_list[node.index]
+        edges.each do |edge_node|
+          if color[edge_node.index] == "white"
+            color[edge_node.index] = "grey"
+            previous[edge_node.index] = node
+            queue.push(edge_node)
+          end
+        end
+      end
+    end
+
+    return nil unless node.value == val2
+
+    chain = [node]
+    while previous[node.index] != nil do
+      node = previous[node.index]
+      chain.unshift(node)
+    end
+
+    return chain
+  end
+
   def connections(node)
     @adjacency_list[node.index]
   end
