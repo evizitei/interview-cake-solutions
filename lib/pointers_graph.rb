@@ -58,4 +58,41 @@ class PointersGraph
     @edges.push(edge) unless @edges.find{|e| e == edge}
     return edge
   end
+
+  def shortest_path(val1, val2)
+    node = @lookup[val1]
+    return nil unless node
+
+    color = {}
+    previous = {}
+    @nodes.each{|n| color[n] = "white" } # white = undiscovered, grey = discovered, black = traversed
+
+    queue = []
+    queue.push(node)
+
+    current = nil
+    while queue.size > 0 do
+      current = queue.shift
+      if current.value == val2
+        queue = []
+      else
+        color[current] = "black"
+        current.edges.each do |edge|
+          target = (edge.node_one == current ? edge.node_two : edge.node_one)
+          if color[target] == "white"
+            color[target] = "grey"
+            previous[target] = current
+            queue.push(target)
+          end
+        end
+      end
+    end
+
+    chain = [current]
+    while previous[current] != nil do
+      current = previous[current]
+      chain.unshift(current)
+    end
+    return chain
+  end
 end
